@@ -3,93 +3,60 @@ import * as ReactDom from 'react-dom';
 import { Version } from '@microsoft/sp-core-library';
 import {
   IPropertyPaneConfiguration,
+  IPropertyPaneDropdownOption,
   PropertyPaneDropdown,
   // PropertyPaneTextField
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
-import { IReadonlyTheme } from '@microsoft/sp-component-base';
-
-import * as strings from 'HeroBannerWebPartStrings';
 import HeroBanner from './components/HeroBanner';
 import { IHeroBannerProps } from './components/IHeroBannerProps';
+import { defaultLibValue } from '../../shared/constants';
+import { Web } from '@pnp/sp/webs';
+import "@pnp/sp/lists";
+import "@pnp/sp/items";
 
 export interface IHeroBannerWebPartProps {
-  description: string;
-  libary: string;
+  listID: string;
 }
 
 export default class HeroBannerWebPart extends BaseClientSideWebPart<IHeroBannerWebPartProps> {
-
-  private _isDarkTheme: boolean = false;
-  private _environmentMessage: string = '';
-
+  private libraryNames: IPropertyPaneDropdownOption[];
+  private defaultListID:any;
   public render(): void {
     const element: React.ReactElement<IHeroBannerProps> = React.createElement(
       HeroBanner,
       {
-        description: this.properties.description,
-        isDarkTheme: this._isDarkTheme,
-        environmentMessage: this._environmentMessage,
-        hasTeamsContext: !!this.context.sdks.microsoftTeams,
-        userDisplayName: this.context.pageContext.user.displayName,
-        libary: this.properties.libary
+        context:this.context,
+        listID:this.properties.listID != null && this.properties.listID != undefined ? this.properties.listID: this.defaultListID,
       }
     );
 
     ReactDom.render(element, this.domElement);
   }
 
-  protected onInit(): Promise<void> {
-    return this._getEnvironmentMessage().then(message => {
-      this._environmentMessage = message;
-    });
+  protected async onInit(): Promise<void> {
+        await this.getAllLibraries();
   }
 
+  protected async getAllLibraries(){
+    try {
+      let objWeb = Web(this.context.pageContext.web.absoluteUrl)
+      //BaseTemplate eq 101 and
+      let lists = await objWeb.lists.filter("(BaseTemplate eq 101 or BaseTemplate eq 119) and hidden eq false").get()
+      this.libraryNames = lists.map((item) => {
+        return {
+          key: item.Id,
+          text: item.Title
+        }
+      });
 
+      this.defaultListID = this.libraryNames.filter(x=> x.text.toLocaleLowerCase() ===defaultLibValue.toLocaleLowerCase()).length > 0 ? this.libraryNames.filter(x=> x.text.toLocaleLowerCase() ===defaultLibValue.toLocaleLowerCase())[0].key : "" ;
 
-  private _getEnvironmentMessage(): Promise<string> {
-    if (!!this.context.sdks.microsoftTeams) { // running in Teams, office.com or Outlook
-      return this.context.sdks.microsoftTeams.teamsJs.app.getContext()
-        .then(context => {
-          let environmentMessage: string = '';
-          switch (context.app.host.name) {
-            case 'Office': // running in Office
-              environmentMessage = this.context.isServedFromLocalhost ? strings.AppLocalEnvironmentOffice : strings.AppOfficeEnvironment;
-              break;
-            case 'Outlook': // running in Outlook
-              environmentMessage = this.context.isServedFromLocalhost ? strings.AppLocalEnvironmentOutlook : strings.AppOutlookEnvironment;
-              break;
-            case 'Teams': // running in Teams
-              environmentMessage = this.context.isServedFromLocalhost ? strings.AppLocalEnvironmentTeams : strings.AppTeamsTabEnvironment;
-              break;
-            default:
-              throw new Error('Unknown host');
-          }
-
-          return environmentMessage;
-        });
+    } catch (error) {
+      console.log(error)
     }
-
-    return Promise.resolve(this.context.isServedFromLocalhost ? strings.AppLocalEnvironmentSharePoint : strings.AppSharePointEnvironment);
   }
 
-  protected onThemeChanged(currentTheme: IReadonlyTheme | undefined): void {
-    if (!currentTheme) {
-      return;
-    }
-
-    this._isDarkTheme = !!currentTheme.isInverted;
-    const {
-      semanticColors
-    } = currentTheme;
-
-    if (semanticColors) {
-      this.domElement.style.setProperty('--bodyText', semanticColors.bodyText || null);
-      this.domElement.style.setProperty('--link', semanticColors.link || null);
-      this.domElement.style.setProperty('--linkHovered', semanticColors.linkHovered || null);
-    }
-
-  }
 
   protected onDispose(): void {
     ReactDom.unmountComponentAtNode(this.domElement);
@@ -110,17 +77,11 @@ export default class HeroBannerWebPart extends BaseClientSideWebPart<IHeroBanner
             {
               // groupName: strings.BasicGroupName,
               groupFields: [
-                PropertyPaneDropdown('libary', {
-                  label: "Libary",
-                  options: [
-                    { key: 'selectanOption', text: 'Select an item' },
-                    { key: 'libary1', text: 'Libary 1' },
-                    { key: 'libary2', text: 'Libary 2', },
-                    { key: 'libary3', text: 'Libary 3' },
-                    { key: 'libary4', text: 'Libary 4' },
-                  ], selectedKey: 'selectanOption'
-
-                }),
+                PropertyPaneDropdown('listID', {
+                  label: "Library",
+                  options: this.libraryNames,
+                  selectedKey: this.defaultListID,
+                })
               ]
             }
           ]
