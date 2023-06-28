@@ -18,7 +18,7 @@ import * as moment from 'moment';
 
 const defaultNewsItem: News = {
   title: "NA",
-  id:0,
+  id: 0,
   dateTime: null,
   category: "NA",
   featuredImageURL: featureImg.feature_img_NoImage,
@@ -47,7 +47,7 @@ export default class HeroBanner extends React.Component<IHeroBannerProps, IHeroB
               <div className='row'>
                 <div className='col-md-6 column_align_wrapper pdl'>
                   {
-                    this.state.news.length > 0 ? this.getNewsDetailsHTML(this.state.news[0],'hb_newsCtegory_01') : this.getNewsDetailsHTML(defaultNewsItem,'hb_newsCtegory_01')
+                    this.state.news.length > 0 ? this.getNewsDetailsHTML(this.state.news[0], 'hb_newsCtegory_01') : this.getNewsDetailsHTML(defaultNewsItem, 'hb_newsCtegory_01')
                   }
                   {/* <a href="#" className='hb_newsCtegory_01' style={{ backgroundImage: `url(${featureImg.feature_img_03})` }}>
                     <div className='hb_content_wrapper'>
@@ -60,9 +60,9 @@ export default class HeroBanner extends React.Component<IHeroBannerProps, IHeroB
                 <div className='col-md-6'>
                   <div className='row'>
                     <div className='col-md-6 column_align_wrapper '>
-                    {
-                    this.state.news.length > 1 ? this.getNewsDetailsHTML(this.state.news[1],'hb_newsCtegory_02') : this.getNewsDetailsHTML(defaultNewsItem,'hb_newsCtegory_02')
-                  }
+                      {
+                        this.state.news.length > 1 ? this.getNewsDetailsHTML(this.state.news[1], 'hb_newsCtegory_02') : this.getNewsDetailsHTML(defaultNewsItem, 'hb_newsCtegory_02')
+                      }
                       {/* <a href="#" className='hb_newsCtegory_02' style={{ backgroundImage: `url(${featureImg.feature_img_04})` }}>
                         <div className='hb_content_wrapper'>
                           <p className='hb_category_wrapper'>  category 01  </p>
@@ -72,9 +72,9 @@ export default class HeroBanner extends React.Component<IHeroBannerProps, IHeroB
                       </a> */}
                     </div>
                     <div className='col-md-6 column_align_wrapper pdr'>
-                    {
-                    this.state.news.length > 2 ? this.getNewsDetailsHTML(this.state.news[1],'hb_newsCtegory_03') : this.getNewsDetailsHTML(defaultNewsItem,'hb_newsCtegory_03')
-                  }
+                      {
+                        this.state.news.length > 2 ? this.getNewsDetailsHTML(this.state.news[1], 'hb_newsCtegory_03') : this.getNewsDetailsHTML(defaultNewsItem, 'hb_newsCtegory_03')
+                      }
                       {/* <a href="#" className='hb_newsCtegory_03' style={{ backgroundImage: `url(${featureImg.feature_img_05})` }}>
                         <div className='hb_content_wrapper'>
                           <p className='hb_category_wrapper'>  category 01  </p>
@@ -86,9 +86,10 @@ export default class HeroBanner extends React.Component<IHeroBannerProps, IHeroB
                   </div>
                   <div className='row'>
                     <div className='col-md-6 column_align_wrapper '>
-                    {
-                    this.state.news.length > 3 ? this.getNewsDetailsHTML(this.state.news[3],'hb_newsCtegory_04') : this.getNewsDetailsHTML(defaultNewsItem,'hb_newsCtegory_04')
-                  }
+            
+                      {
+                        this.state.news.length > 3 ? this.getNewsDetailsHTML(this.state.news[3], 'hb_newsCtegory_04') : this.getNewsDetailsHTML(defaultNewsItem, 'hb_newsCtegory_04')
+                      }
                       {/* <a href="#" className='hb_newsCtegory_04' style={{ backgroundImage: `url(${featureImg.feature_img_05})` }}>
                         <div className='hb_content_wrapper'>
                           <p className='hb_category_wrapper'>  category 01  </p>
@@ -98,9 +99,9 @@ export default class HeroBanner extends React.Component<IHeroBannerProps, IHeroB
                       </a> */}
                     </div>
                     <div className='col-md-6 column_align_wrapper pdr'>
-                    {
-                    this.state.news.length > 4 ? this.getNewsDetailsHTML(this.state.news[4],'hb_newsCtegory_05') : this.getNewsDetailsHTML(defaultNewsItem,'hb_newsCtegory_05')
-                  }
+                      {
+                        this.state.news.length > 4 ? this.getNewsDetailsHTML(this.state.news[4], 'hb_newsCtegory_05') : this.getNewsDetailsHTML(defaultNewsItem, 'hb_newsCtegory_05')
+                      }
                       {/* <a href="#" className='hb_newsCtegory_05' style={{ backgroundImage: `url(${featureImg.feature_img_04})` }}>
                         <div className='hb_content_wrapper'>
                           <p className='hb_category_wrapper'>  category 01  </p>
@@ -115,17 +116,19 @@ export default class HeroBanner extends React.Component<IHeroBannerProps, IHeroB
             </div>
           </section>
         }
+
         {/* hero banner mobile section start */}
         {
-           this.state.news.length > 0 &&
-           <section className='mobile_hb_wrapper'>
-           <Carousel interval={10000}>
-             {this.state.news.map((item) =>
-               <Carousel.Item>
-                 {this.getNewsDetailsHTML(item,'hb_newsCtegory_01')}
-               </Carousel.Item>
-             )}
-             {/* <Carousel.Item>
+          this.state.news.length > 0 &&
+          <section className='mobile_hb_wrapper'>
+            <Carousel interval={10000}>
+              {this.state.news.map((item) =>
+                <Carousel.Item>
+                  {this.getNewsDetailsHTML(item, 'hb_newsCtegory_01')}
+                </Carousel.Item>
+              )}
+
+              {/* <Carousel.Item>
                <a href="#" className='hb_newsCtegory_01' style={{ backgroundImage: `url(${featureImg.feature_img_03})` }}>
                  <div className='hb_content_wrapper'>
                    <p className='hb_category_wrapper'>  category 01  </p>
@@ -161,8 +164,8 @@ export default class HeroBanner extends React.Component<IHeroBannerProps, IHeroB
                  </div>
                </a>
              </Carousel.Item> */}
-           </Carousel>
-         </section>
+            </Carousel>
+          </section>
         }
       </div>
     );
@@ -208,13 +211,17 @@ export default class HeroBanner extends React.Component<IHeroBannerProps, IHeroB
     }
   }
 
-  public getNewsDetailsHTML(item: News,categoryClassName:string) {
+  public getNewsDetailsHTML(item: News, categoryClassName: string) {
     try {
       return (
+      
         <a href={item.pageURL} className={categoryClassName} style={{ backgroundImage: `url(${item.featuredImageURL})` }}>
           <div className='hb_content_wrapper'>
             <p className='hb_category_wrapper'>  {item.category}  </p>
-            <h3 className='hb_title_wrapper'> {item.title} </h3>
+            <h3 className='hb_title_wrapper'>
+              {item.title.length > 45 ? item.title.slice(0, 45) + '...' : item.title}
+            </h3>
+            {console.log("hgjgjg")}
             <h5 className='hb_date_wrapper'>{item.dateTime != null || item.dateTime != undefined ? moment(item.dateTime).format(newsDateFormat) : ''}</h5>
           </div>
         </a>
