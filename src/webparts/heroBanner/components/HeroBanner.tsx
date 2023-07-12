@@ -111,11 +111,11 @@ export default class HeroBanner extends React.Component<IHeroBannerProps, IHeroB
   public async getAllNews() {
     try {
       let objWeb = Web(this.props.context.pageContext.web.absoluteUrl)
-      let newsItems = await objWeb.lists.getById(this.props.listID).items.select(`*,${columnNames.fileRef},${columnNames.category}/${expandCategoryValue}`).expand(columnNames.category).filter(`${columnNames.pageType} eq '${pageTypeNewsString}' and ${columnNames.featured} eq 1`).orderBy(columnNames.startDate, false).getAll();
+      let newsItems = await objWeb.lists.getById(this.props.listID).items.select(`*,${columnNames.fileRef},${columnNames.category}/${expandCategoryValue}`).expand(columnNames.category).filter(`${columnNames.pageType} eq '${pageTypeNewsString}' and ${columnNames.heroNews} eq 1`).orderBy(columnNames.startDate, false).getAll();
       newsItems = newsItems.sort((a, b) => {
         if (a[columnNames.startDate] && b[columnNames.startDate])
           return this._getTime(new Date(b[columnNames.startDate])) - this._getTime(new Date(a[columnNames.startDate]));
-      }).slice(0, 4);
+      }).slice(0, 5);
       this.setState({
         news: newsItems.map((item) => {
           return {
