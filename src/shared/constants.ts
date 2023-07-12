@@ -17,5 +17,6 @@ export const columnNames = {
     fileRef:"FileRef",
     title:"Title",
     contact:"ContactPerson",
-    trending:"Trending"
+    trending:"Trending",
+    heroNews:"HeroNews"
 }
